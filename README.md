@@ -1,5 +1,5 @@
 # 3110-Final-Project
 Lucas Doell (lmd248)
-Jeffrey Namnum jn383
+Jeffrey Namnum (jn383)
 Aaron Brown (asb324)
 Dustin Ngo (dpn29)
