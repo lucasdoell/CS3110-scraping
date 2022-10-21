@@ -50,7 +50,7 @@ let basketball_stat player stat =
   else if stat = "salary" then player.salary
   else raise UnknownStat stat
 
-let baseball_stat player stat =
+let baseball_stat (player : baseball_player) stat =
   if stat = "avg" then player.avg
   else if stat = "obp" then player.obp
   else if stat = "slg" then player.slg
@@ -60,7 +60,7 @@ let baseball_stat player stat =
   else if stat = "salary" then player.salary
   else raise UnknownStat stat
 
-let pitcher_stat player stat =
+let pitcher_stat (player : baseball_pitcher) stat =
   if stat = "avg" then player.avg
   else if stat = "obp" then player.obp
   else if stat = "slg" then player.slg
