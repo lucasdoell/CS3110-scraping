@@ -48,7 +48,7 @@ let basketball_stat player stat =
   else if stat = "fgp" then player.fgp
   else if stat = "tpp" then player.tpp
   else if stat = "salary" then player.salary
-  else raise UnknownStat stat
+  else raise (UnknownStat stat)
 
 let baseball_stat (player : baseball_player) stat =
   if stat = "avg" then player.avg
@@ -58,7 +58,7 @@ let baseball_stat (player : baseball_player) stat =
   else if stat = "hr" then player.hr
   else if stat = "rbi" then player.rbi
   else if stat = "salary" then player.salary
-  else raise UnknownStat stat
+  else raise (UnknownStat stat)
 
 let pitcher_stat (player : baseball_pitcher) stat =
   if stat = "avg" then player.avg
@@ -70,4 +70,4 @@ let pitcher_stat (player : baseball_pitcher) stat =
   else if stat = "era" then player.era
   else if stat = "strikeouts" then player.strikeouts
   else if stat = "salary" then player.salary
-  else raise UnknownStat stat
+  else raise (UnknownStat stat)
