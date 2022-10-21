@@ -1,5 +1,5 @@
-Exception UnknownSport of string
-Exception UnknownStat of string
+exception UnknownSport of string
+exception UnknownStat of string
 
 type Basketball_Player = {
   points : float;
