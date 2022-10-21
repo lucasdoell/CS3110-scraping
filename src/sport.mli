@@ -1,8 +1,8 @@
-Exception UnknownSport of string
+exception UnknownSport of string
 (** Raised when an unknown sport identifier is encountered. It carries
     the identifier of the unknown sport*)
 
-Exception UnknownStat of string
+exception UnknownStat of string
 (** Raised when an unknown stat identifier is encountered. It carries
     the identifier of the unknown stat*)
 
