@@ -1,7 +1,7 @@
 exception UnknownSport of string
 exception UnknownStat of string
 
-type Basketball_Player = {
+type basketball_player = {
   points : float;
   assists : float;
   rebounds : float;
@@ -13,7 +13,7 @@ type Basketball_Player = {
   salary : float
 }
 
- type Baseball_Player = {
+ type baseball_player = {
   avg : float;
   obp : float
   slg : float;
@@ -23,7 +23,7 @@ type Basketball_Player = {
   salary : float
  }
 
- type Baseball_Pitcher = {
+ type baseball_pitcher = {
   avg : float;
   obp : float
   slg : float;
