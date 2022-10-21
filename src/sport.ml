@@ -15,7 +15,7 @@ type basketball_player = {
 
  type baseball_player = {
   avg : float;
-  obp : float
+  obp : float;
   slg : float;
   steals : float;
   hr : float;
@@ -25,7 +25,7 @@ type basketball_player = {
 
  type baseball_pitcher = {
   avg : float;
-  obp : float
+  obp : float;
   slg : float;
   steals : float;
   hr : float;
