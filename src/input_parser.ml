@@ -6,8 +6,7 @@ let parse input context = (**context could be sport or player; for sport pass
     match context with
     | sport -> match input with
     | | "" -> raise EmptyInput ("No sport chosen!")
-    | | s -> if is_sport s then s else raise UnknownSport ("This is not a valid 
-    sport!")
+    | | s -> s
     | player -> match input with
     | | "" -> raise EmptyInput ("No player chosen!")
     | | s -> s
