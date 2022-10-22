@@ -1,5 +1,24 @@
+# Installation Guide
+
+## Dependencies
+The following dependencies are required to build and run the application:
+- mechaml
+- ounit2
+
+To install the dependencies, run the following commands:
+```bash
+$ opam install mechaml
+$ opam install ounit2
+```
+
+## Build
+To build the application, run the following command:
+```bash
+$ make build
+```
+
 ## Troubleshooting
-The following error occurred during the installation of Mechaml:
+If the following error occurs during the installation of Mechaml:
 ```
 <><> Error report <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ┌─ The following actions failed
@@ -12,11 +31,11 @@ The packages you requested declare the following system dependencies. Please mak
     libgmp-dev pkg-config
 ```
 
-The solution to this problem was to run:
+The solution to this problem is to run the following command:
 ```bash
-sudo apt-get install libgmp-dev pkg-config
+$ sudo apt-get install libgmp-dev pkg-config
 ```
-Then, it was possible to complete the installation of Mechaml by running:
+Then, it will be possible to complete the installation of Mechaml by running:
 ```bash
-opam install mechaml
+$ opam install mechaml
 ```
