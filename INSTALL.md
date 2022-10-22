@@ -17,6 +17,14 @@ To build the application, run the following command:
 $ make build
 ```
 
+## Run
+To run the application, run the following command:
+```bash
+$ make test
+```
+**Warning:** there is a fatal error that will cause the tests to fail. This is expected behavior. The error is caused by an issue with the `re` library. This
+issue is being tracked and will be fixed in a future version.
+
 ## Troubleshooting
 If the following error occurs during the installation of Mechaml:
 ```
