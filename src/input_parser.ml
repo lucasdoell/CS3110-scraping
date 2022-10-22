@@ -5,11 +5,11 @@ let parse input context = (**context could be sport or player; for sport pass
     stat if valid*)
     match context with
     | sport -> match input with
-     | "" -> raise EmptyInput ("No sport chosen!")
+     | "" -> raise (EmptyInput "No sport chosen!")
      | s -> s
     | player -> match input with
-     | "" -> raise EmptyInput ("No player chosen!")
+     | "" -> raise (EmptyInput "No player chosen!")
      | s -> s
     | stat -> match input with
-     | "" -> raise EmptyInput ("Please choose a stat!")
+     | "" -> raise (EmptyInput "Please choose a stat!")
      | s -> s
