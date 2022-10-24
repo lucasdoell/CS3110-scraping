@@ -1,4 +1,8 @@
 (library
  (name scraping)
  (public_name Scraping)
- (libraries mechaml str))
+ (libraries mechaml str ANSITerminal))
+(library
+ (name command_line)
+ (public_name CommandLine)
+ (libraries str ANSITerminal))
