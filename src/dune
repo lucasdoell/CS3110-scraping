@@ -1,4 +1,4 @@
 (library
  (name scraping)
  (public_name Scraping)
- (libraries mechaml str))
+ (libraries mechaml str batteries))

@@ -13,3 +13,6 @@ val filter_bball_scrape : string -> bball_res
 
 val bball_scrape : string -> bball_res
 (** [bball_scrape p] Is the main function that runs the web scraping and performs the filtering. *)
+
+val to_string : bball_res -> string
+(** [to_string b] is the string representation of the bball_res [b]. *)
