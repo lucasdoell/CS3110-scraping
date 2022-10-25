@@ -1,5 +1,6 @@
 open Mechaml
 open Soup
+open Batteries
 module M = Agent.Monad
 open M.Infix
 
@@ -20,37 +21,43 @@ let init_bball_scrape (player : string) =
   let result = trimmed_texts query in
   String.concat "'; '" (List.rev result)
 
-let filter_bball_scrape str =
-  let re_advanced = Re.Str.regexp {|'USG%'; '[0-9]{1,3}.\d'|} in
-  let re_misc = Re.Str.regexp {|'\+\/-'; '[+-][0-9]{1,3}'|} in
-  let re_defense = Re.Str.regexp {|'BPG'; '[0-9]{1,3}.[0-9]{1,3}'|} in
-  let re_assists = Re.Str.regexp {|'APG'; '[0-9]{1,3}.[0-9]{1,3}'|} in
-  let re_shooting = Re.Str.regexp {|'EFG%'; '[0-9]{1,3}.[0-9]{1,3}'|} in
-  let re_rebounding = Re.Str.regexp {|'RPG'; '[0-9]{1,3}.[0-9]{1,3}'|} in
-  let re_scoring = Re.Str.regexp {|'PPG'; '[0-9]{1,3}.[0-9]{1,3}'|} in
-
-  let _ = Re.Str.string_match re_advanced str 0 in
-  let adv = Re.Str.matched_string str in
-
-  let _ = Re.Str.string_match re_misc str 0 in
-  let misc = Re.Str.matched_string str in
-
-  let _ = Re.Str.string_match re_defense str 0 in
-  let def = Re.Str.matched_string str in
-
-  let _ = Re.Str.string_match re_assists str 0 in
-  let assists = Re.Str.matched_string str in
-
-  let _ = Re.Str.string_match re_shooting str 0 in
-  let shooting = Re.Str.matched_string str in
-
-  let _ = Re.Str.string_match re_rebounding str 0 in
-  let reb = Re.Str.matched_string str in
-
-  let _ = Re.Str.string_match re_scoring str 0 in
-  let scoring = Re.Str.matched_string str in
+let filter_bball_scrape res =
+  let adv =
+    Substring.to_string
+      (Substring.substring res (String.find res "'USG%'; '") 14)
+  in
+  let misc =
+    Substring.to_string
+      (Substring.substring res (String.find res "'+/-'; '") 13)
+  in
+  let def =
+    Substring.to_string
+      (Substring.substring res (String.find res "'BPG'; '") 13)
+  in
+  let assists =
+    Substring.to_string
+      (Substring.substring res (String.find res "'APG'; '") 13)
+  in
+  let shooting =
+    Substring.to_string
+      (Substring.substring res (String.find res "'EFG%'; '") 15)
+  in
+  let reb =
+    Substring.to_string
+      (Substring.substring res (String.find res "'RPG'; '") 14)
+  in
+  let scoring =
+    Substring.to_string
+      (Substring.substring res (String.find res "'PPG'; '") 14)
+  in
 
   { adv; misc; def; assists; shooting; reb; scoring }
 
 let bball_scrape (player : string) =
   filter_bball_scrape (init_bball_scrape player)
+
+let to_string res =
+  "Scoring: " ^ res.scoring ^ "\n" ^ "Rebounding: " ^ res.reb ^ "\n"
+  ^ "Shooting: " ^ res.shooting ^ "\n" ^ "Assists: " ^ res.assists ^ "\n"
+  ^ "Defense: " ^ res.def ^ "\n" ^ "Misc: " ^ res.misc ^ "\n" ^ "Advanced: "
+  ^ res.adv

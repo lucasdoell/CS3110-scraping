@@ -1,7 +1,7 @@
 (library
  (name scraping)
  (public_name Scraping)
- (libraries mechaml str ANSITerminal))
+ (libraries mechaml str batteries))
 (library
  (name command_line)
  (public_name CommandLine)
