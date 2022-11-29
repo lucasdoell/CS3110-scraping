@@ -36,6 +36,7 @@ module Basketball = struct
     else raise (UnknownStat st)
 
   let compare (p1 : player) (p2 : player) st =
+    try
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (stat p1 st) = None 
       && float_of_string_opt (stat p2 st) = None 
@@ -58,6 +59,8 @@ module Basketball = struct
       ^ (stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (stat p1 st) ^ "."
+    with 
+    | UnknownStat st -> "That's not a supported stat."
     
 end
 
@@ -108,6 +111,7 @@ module Baseball = struct
     else raise (UnknownStat st)
 
   let compare (p1 : player) (p2 : player) st =
+    try
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (stat p1 st) = None 
       && float_of_string_opt (stat p2 st) = None 
@@ -130,6 +134,8 @@ module Baseball = struct
       ^ (stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (stat p1 st) ^ "."  
+    with 
+    | UnknownStat st -> "That's not a suported stat."
 
 end
 
@@ -180,6 +186,7 @@ module Hockey = struct
     else raise (UnknownStat st)
 
   let compare_goalies (p1 : goalie) (p2 : goalie) st =
+    try
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (goalie_stat p1 st) = None 
       && float_of_string_opt (goalie_stat p2 st) = None 
@@ -202,8 +209,11 @@ module Hockey = struct
       " and " ^ p1.name ^ " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (goalie_stat p1 st) ^ "."   
+    with
+    | UnknownStat st -> "That's not a supported stat."
       
-  let compare (p1 : player) (p2 : player) st =
+  let compare_players (p1 : player) (p2 : player) st =
+    try
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (player_stat p1 st) = None 
       && float_of_string_opt (player_stat p2 st) = None 
@@ -226,6 +236,8 @@ module Hockey = struct
       " and " ^ p1.name ^ " has " ^ (player_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (player_stat p1 st) ^ "."  
+    with 
+    | UnknownStat st -> "That's not a supported stat."
 
 end
 
@@ -276,6 +288,7 @@ module Soccer = struct
     else raise (UnknownStat st)
 
   let compare_goalies (p1 : goalie) (p2 : goalie) st =
+    try
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (goalie_stat p1 st) = None 
       && float_of_string_opt (goalie_stat p2 st) = None 
@@ -298,8 +311,11 @@ module Soccer = struct
       " and " ^ p1.name ^ " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (goalie_stat p1 st) ^ "."   
+    with 
+    | UnknownStat st -> "That's not a supported stat."
 
-  let compare (p1 : player) (p2 : player) st =
+  let compare_players (p1 : player) (p2 : player) st =
+    try
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (player_stat p1 st) = None 
       && float_of_string_opt (player_stat p2 st) = None 
@@ -322,6 +338,8 @@ module Soccer = struct
       " and " ^ p1.name ^ " has " ^ (player_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (player_stat p1 st) ^ "."  
+    with 
+    | UnknownSport st -> "That's not a supported stat."
 
 end
 
@@ -338,7 +356,7 @@ module Football = struct
     rtd : string;
   }
 
-  type player = {
+  type offense = {
     name : string;
     number : string;
     team : string;
@@ -367,21 +385,173 @@ module Football = struct
     apyds : string;
   }
 
-  type punter = {
-    name : string;
-    number : string;
-    team : string;
-    position : string;
-    puntavg : string;
-  }
-
-  type kicker = {
+  type special = {
     name : string;
     number : string;
     team : string;
     position : string;
     pts : string;
     tbp : string;
+    avg : string;
   }
+
+
+  let qb_stat (p : quarterback) st =
+    if st = "name" then p.name
+    else if st = "number" then p.number
+    else if st = "team" then p.team
+    else if st = "position" then p.position
+    else if st = "passing yards" then p.pyds
+    else if st = "passing touchdowns" then p.ptd
+    else if st = "rushing yards" then p.ryds
+    else if st = "rushing touchdowns" then p.rtd
+    else raise (Unknownstat st)
+
+  let offense_stat (p : offense) st =
+    if st = "name" then p.name
+    else if st = "number" then p.number
+    else if st = "team" then p.team
+    else if st = "position" then p.position
+    else if st = "receiving yards" then p.recyds
+    else if st = "receiving touchdowns" then p.rectd
+    else if st = "rushing yards" then p.ryds
+    else if st = "rushing touchdowns" then p.rtd
+    else if st = "kick return yards" then p.kretyds
+    else if st = "punt return yards" then p.pretyds
+    else if st = "points" then p.pts
+    else if st = "all purpose yards" then p.apyds
+    else raise (UnknownStat st)
+
+  let defense_stat (p : defense) st =
+    if st = "name" then p.name
+    else if st = "number" then p.number
+    else if st = "team" then p.team
+    else if st = "position" then p.position
+    else if st = "kick return yards" then p.kretyds
+    else if st = "punt return yards" then p.pretyds
+    else if st = "interceptions" then p.interceptions
+    else if st = "total tackles" then p.tckl
+    else if st = "sacks" then p.sck
+    else if st = "points" then p.pts
+    else if st = "all purpose yards" then p.apyds
+    else raise (UnknownStat st)
+
+  let special_stat (p : kicker) st =
+    if st = "name" then p.name
+    else if st = "number" then p.number
+    else if st = "team" then p.team
+    else if st = "position" then p.position
+    else if st = "kicking points" then p.pts
+    else if st = "kickoff touchback percentage" then p.tbp
+    else if st = "punt net average" then p.avg
+    else raise (UnknownStat st)
+
+  let compare_qb (p1 : quarterback) (p2 : quarterback) st =
+    try
+    if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
+    else if float_of_string_opt (qb_stat p1 st) = None 
+      && float_of_string_opt (qb_stat p2 st) = None 
+      then "Neither " ^ p1.name ^ " nor " ^ p2.name ^ " has a " ^ st ^ " stat."
+    else if float_of_string_opt (qb_stat p1 st) = None
+      && float_of_string_opt (qb_stat p2 st) != None
+      then p1.name ^ " doesn't have a " ^ st ^ " stat and " ^ p2.name ^ " has "
+      ^ (qb_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string_opt (qb_stat p1 st) != None
+      && float_of_string_opt (qb_stat p2 st) = None
+      then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
+      ^ (qb_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (qb_stat p1 st) > float_of_string (qb_stat p2 st)
+      then p1.name ^ " has higher " ^ st ^ " than " ^ p2.name ^ ". " ^ p1.name ^
+      " has " ^ (qb_stat p1 st) ^ " " ^ st ^ " and " ^ p2.name ^ " has "
+      ^ (qb_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (qb_stat p1 st) < float_of_string (qb_stat p2 st)
+      then p2.name ^ " has higher " ^ st ^ " than " ^ p1.name ^ ". " ^ p2.name ^
+      " has " ^ (qb_stat p2 st) ^ " " ^ st ^ " and " ^ p1.name ^ " has "
+      ^ (qb_stat p1 st) ^ " " ^ st ^ "."
+    else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
+      ^ (qb_stat p1 st) ^ "."  
+    with 
+    | UnknownStat st -> "That's not a supported stat."
+
+  let compare_offense (p1 : offense) (p2 : offense) st =
+    try
+    if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
+    else if float_of_string_opt (offense_stat p1 st) = None 
+      && float_of_string_opt (offense_stat p2 st) = None 
+      then "Neither " ^ p1.name ^ " nor " ^ p2.name ^ " has a " ^ st ^ " stat."
+    else if float_of_string_opt (offense_stat p1 st) = None
+      && float_of_string_opt (offense_stat p2 st) != None
+      then p1.name ^ " doesn't have a " ^ st ^ " stat and " ^ p2.name ^ " has "
+      ^ (offense_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string_opt (offense_stat p1 st) != None
+      && float_of_string_opt (offense_stat p2 st) = None
+      then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
+      ^ (offense_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (offense_stat p1 st) > float_of_string 
+      (offense_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (offense_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (offense_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (offense_stat p1 st) < float_of_string 
+      (offense_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (offense_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (offense_stat p1 st) ^ " " ^ st ^ "."
+    else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
+      ^ (offense_stat p1 st) ^ "."  
+    with 
+    | UnknownSport st -> "That's not a supported stat."
+
+  let compare_defense (p1 : defense) (p2 : defense) st =
+    try
+    if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
+    else if float_of_string_opt (defense_stat p1 st) = None 
+      && float_of_string_opt (defense_stat p2 st) = None 
+      then "Neither " ^ p1.name ^ " nor " ^ p2.name ^ " has a " ^ st ^ " stat."
+    else if float_of_string_opt (defense_stat p1 st) = None
+      && float_of_string_opt (defense_stat p2 st) != None
+      then p1.name ^ " doesn't have a " ^ st ^ " stat and " ^ p2.name ^ " has "
+      ^ (defense_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string_opt (defense_stat p1 st) != None
+      && float_of_string_opt (defense_stat p2 st) = None
+      then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
+      ^ (defense_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (defense_stat p1 st) > float_of_string 
+      (defense_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (defense_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (defense_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (defense_stat p1 st) < float_of_string 
+      (defense_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (defense_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (defense_stat p1 st) ^ " " ^ st ^ "."
+    else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
+      ^ (defense_stat p1 st) ^ "."  
+    with
+    | UnknownSport st -> "That's not a supported stat."
+
+  let compare_special (p1 : special) (p2 : special) st =
+    try
+    if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
+    else if float_of_string_opt (special_stat p1 st) = None 
+      && float_of_string_opt (special_stat p2 st) = None 
+      then "Neither " ^ p1.name ^ " nor " ^ p2.name ^ " has a " ^ st ^ " stat."
+    else if float_of_string_opt (special_stat p1 st) = None
+      && float_of_string_opt (special_stat p2 st) != None
+      then p1.name ^ " doesn't have a " ^ st ^ " stat and " ^ p2.name ^ " has "
+      ^ (special_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string_opt (special_stat p1 st) != None
+      && float_of_string_opt (special_stat p2 st) = None
+      then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
+      ^ (special_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (special_stat p1 st) > float_of_string 
+      (special_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (special_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (special_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (special_stat p1 st) < float_of_string 
+      (special_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (special_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (special_stat p1 st) ^ " " ^ st ^ "."
+    else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
+      ^ (special_stat p1 st) ^ "."  
+    with
+    | UnknownSport st -> "That's not a supported stat."
 
 end
