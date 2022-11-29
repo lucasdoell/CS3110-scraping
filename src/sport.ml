@@ -3,6 +3,7 @@ exception UnknownStat of string
 
 let is_sport sp = 
   sp = "basketball" || sp = "baseball" || sp = "hockey" || sp = "soccer"
+  || sp = "football"
 
 module Basketball = struct
 
@@ -22,6 +23,7 @@ module Basketball = struct
 
   let stat (p : player) st =
     if st = "name" then p.name
+    else if st = "number" then p.number
     else if st = "team" then p.team
     else if st = "position" then p.position
     else if st = "usg" then p.adv
@@ -157,6 +159,7 @@ module Hockey = struct
 
   let goalie_stat (p : goalie) st =
     if st = "name" then p.name
+    else if st = "number" then p.number
     else if st = "team" then p.team
     else if st = "position" then p.position
     else if st = "goals against" then p.gaa
@@ -164,6 +167,7 @@ module Hockey = struct
 
   let player_stat (p : player) st =
     if st = "name" then p.name
+    else if st = "number" then p.number
     else if st = "team" then p.team
     else if st = "position" then p.position
     else if st = "goals" then p.goals
@@ -188,18 +192,18 @@ module Hockey = struct
       && float_of_string_opt (goalie_stat p2 st) = None
       then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
       ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
-    else if float_of_string (goalie_stat p1 st) > float_of_string (goalie_stat p2 st)
-      then p1.name ^ " has higher " ^ st ^ " than " ^ p2.name ^ ". " ^ p1.name ^
-      " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ " and " ^ p2.name ^ " has "
-      ^ (goalie_stat p2 st) ^ " " ^ st ^ "."
-    else if float_of_string (goalie_stat p1 st) < float_of_string (goalie_stat p2 st)
-      then p2.name ^ " has higher " ^ st ^ " than " ^ p1.name ^ ". " ^ p2.name ^
-      " has " ^ (goalie_stat p2 st) ^ " " ^ st ^ " and " ^ p1.name ^ " has "
-      ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (goalie_stat p1 st) > float_of_string 
+      (goalie_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (goalie_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (goalie_stat p1 st) < float_of_string 
+      (goalie_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (goalie_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (goalie_stat p1 st) ^ "."   
       
-  let compare_players (p1 : player) (p2 : player) st =
+  let compare (p1 : player) (p2 : player) st =
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (player_stat p1 st) = None 
       && float_of_string_opt (player_stat p2 st) = None 
@@ -212,14 +216,14 @@ module Hockey = struct
       && float_of_string_opt (player_stat p2 st) = None
       then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
       ^ (player_stat p1 st) ^ " " ^ st ^ "."
-    else if float_of_string (player_stat p1 st) > float_of_string (player_stat p2 st)
-      then p1.name ^ " has higher " ^ st ^ " than " ^ p2.name ^ ". " ^ p1.name ^
-      " has " ^ (player_stat p1 st) ^ " " ^ st ^ " and " ^ p2.name ^ " has "
-      ^ (player_stat p2 st) ^ " " ^ st ^ "."
-    else if float_of_string (player_stat p1 st) < float_of_string (player_stat p2 st)
-      then p2.name ^ " has higher " ^ st ^ " than " ^ p1.name ^ ". " ^ p2.name ^
-      " has " ^ (player_stat p2 st) ^ " " ^ st ^ " and " ^ p1.name ^ " has "
-      ^ (player_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (player_stat p1 st) > float_of_string 
+      (player_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (player_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (player_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (player_stat p1 st) < float_of_string 
+      (player_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (player_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (player_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (player_stat p1 st) ^ "."  
 
@@ -284,18 +288,18 @@ module Soccer = struct
       && float_of_string_opt (goalie_stat p2 st) = None
       then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
       ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
-    else if float_of_string (goalie_stat p1 st) > float_of_string (goalie_stat p2 st)
-      then p1.name ^ " has higher " ^ st ^ " than " ^ p2.name ^ ". " ^ p1.name ^
-      " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ " and " ^ p2.name ^ " has "
-      ^ (goalie_stat p2 st) ^ " " ^ st ^ "."
-    else if float_of_string (goalie_stat p1 st) < float_of_string (goalie_stat p2 st)
-      then p2.name ^ " has higher " ^ st ^ " than " ^ p1.name ^ ". " ^ p2.name ^
-      " has " ^ (goalie_stat p2 st) ^ " " ^ st ^ " and " ^ p1.name ^ " has "
-      ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (goalie_stat p1 st) > float_of_string 
+      (goalie_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (goalie_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (goalie_stat p1 st) < float_of_string 
+      (goalie_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (goalie_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (goalie_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
-      ^ (goalie_stat p1 st) ^ "."  
+      ^ (goalie_stat p1 st) ^ "."   
 
-  let compare_players (p1 : player) (p2 : player) st =
+  let compare (p1 : player) (p2 : player) st =
     if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
     else if float_of_string_opt (player_stat p1 st) = None 
       && float_of_string_opt (player_stat p2 st) = None 
@@ -308,16 +312,16 @@ module Soccer = struct
       && float_of_string_opt (player_stat p2 st) = None
       then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
       ^ (player_stat p1 st) ^ " " ^ st ^ "."
-    else if float_of_string (player_stat p1 st) > float_of_string (player_stat p2 st)
-      then p1.name ^ " has higher " ^ st ^ " than " ^ p2.name ^ ". " ^ p1.name ^
-      " has " ^ (player_stat p1 st) ^ " " ^ st ^ " and " ^ p2.name ^ " has "
-      ^ (player_stat p2 st) ^ " " ^ st ^ "."
-    else if float_of_string (player_stat p1 st) < float_of_string (player_stat p2 st)
-      then p2.name ^ " has higher " ^ st ^ " than " ^ p1.name ^ ". " ^ p2.name ^
-      " has " ^ (player_stat p2 st) ^ " " ^ st ^ " and " ^ p1.name ^ " has "
-      ^ (player_stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (player_stat p1 st) > float_of_string 
+      (player_stat p2 st) then p1.name ^ " has higher " ^ st ^ " than " ^ 
+      p2.name ^ ". " ^ p1.name ^ " has " ^ (player_stat p1 st) ^ " " ^ st ^ 
+      " and " ^ p2.name ^ " has " ^ (player_stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (player_stat p1 st) < float_of_string 
+      (player_stat p2 st) then p2.name ^ " has higher " ^ st ^ " than " ^ 
+      p1.name ^ ". " ^ p2.name ^ " has " ^ (player_stat p2 st) ^ " " ^ st ^ 
+      " and " ^ p1.name ^ " has " ^ (player_stat p1 st) ^ " " ^ st ^ "."
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
-      ^ (player_stat p1 st) ^ "." 
+      ^ (player_stat p1 st) ^ "."  
 
 end
 
@@ -334,7 +338,7 @@ module Football = struct
     rtd : string;
   }
 
-  type offense = {
+  type player = {
     name : string;
     number : string;
     team : string;

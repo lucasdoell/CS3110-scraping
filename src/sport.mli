@@ -9,3 +9,4 @@ exception UnknownStat of string
 (** [is_sport r] verifies that r is a compatible sport, raises
     [UnknownSport r] if r is not a sport supported by the system *)
 val is_sport : string -> bool
+
