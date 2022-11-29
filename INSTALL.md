@@ -4,11 +4,13 @@
 The following dependencies are required to build and run the application:
 - mechaml
 - ounit2
+- batteries
 
 To install the dependencies, run the following commands:
 ```bash
 $ opam install mechaml
 $ opam install ounit2
+$ opam install batteries
 ```
 
 ## Build
@@ -22,8 +24,20 @@ To run the application, run the following command:
 ```bash
 $ make test
 ```
-**Warning:** there is a fatal error that will cause the tests to fail. This is expected behavior. The error is caused by an issue with the `re` library. This
-issue is being tracked and will be fixed in a future version.
+If all of the dependencies are functioning properly, the test output will look like this:
+```
+Testing HTML parsing:               
+Testing [data/query.html]
+
+Player: Lebron James
+Scoring: 'PPG'; '25.5';
+Rebounding: 'RPG'; '12.5';
+Shooting: 'EFG%'; '50.0';
+Assists: 'APG'; '7.0';
+Defense: 'BPG'; '1.0';
+Misc: '+/-'; '-11';
+Advanced: 'USG%'; '29.9'
+```
 
 ## Troubleshooting
 If the following error occurs during the installation of Mechaml:
