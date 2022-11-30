@@ -1,3 +1,3 @@
 (executable
  (name main)
- (libraries scraping command_line mechaml ounit2 ANSITerminal))
+ (libraries scraping mechaml ounit2 ANSITerminal))
