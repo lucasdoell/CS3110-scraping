@@ -405,7 +405,7 @@ module Football = struct
     else if st = "passing touchdowns" then p.ptd
     else if st = "rushing yards" then p.ryds
     else if st = "rushing touchdowns" then p.rtd
-    else raise (Unknownstat st)
+    else raise (UnknownStat st)
 
   let offense_stat (p : offense) st =
     if st = "name" then p.name
@@ -436,7 +436,7 @@ module Football = struct
     else if st = "all purpose yards" then p.apyds
     else raise (UnknownStat st)
 
-  let special_stat (p : kicker) st =
+  let special_stat (p : special) st =
     if st = "name" then p.name
     else if st = "number" then p.number
     else if st = "team" then p.team
