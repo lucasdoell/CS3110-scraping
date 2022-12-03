@@ -30,3 +30,12 @@ doc:
 
 opendoc: doc
 	@bash opendoc.sh
+
+install:
+	sudo apt-get upgrade
+	opam install mechaml
+	opam install ounit2
+	opam install batteries
+	sudo apt-get install python3
+	sudo apt-get install python3-bs4
+	sudo apt-get install python-is-python3
