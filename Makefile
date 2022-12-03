@@ -1,5 +1,8 @@
 .PHONY: test check
 
+cloc:
+	cloc --by-file --include-lang=OCaml .
+
 build:
 	dune build
 
