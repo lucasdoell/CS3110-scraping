@@ -21,7 +21,7 @@ let scraping_test_suite =
   let _ = print_endline "\n➾ Testing Quarterback\n" in
   let name = "tom brady" in
   let _ = print_endline (to_string_player (Football.get_player_info name)) in
-  Football.qback_scrape "tom brady" |> Football.to_string_qb |> print_endline;
+  Football.qback_scrape name |> Football.to_string_qb |> print_endline;
 
   let _ = print_endline "\n➾ Testing Runningback\n" in
   let name = "leonard fournette" in
