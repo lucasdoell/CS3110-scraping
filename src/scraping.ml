@@ -3,6 +3,7 @@ open Soup
 open Batteries
 module M = Agent.Monad
 open M.Infix
+open Sys
 
 module type BBall = sig
   type bball_res
@@ -34,6 +35,20 @@ module type FBall = sig
   val to_string_off : offensive -> string
 end
 
+let validate_query (player : string) =
+  String.replace_chars
+    (function
+      | ' ' -> "-"
+      | '_' -> "-"
+      | c -> String.of_char c)
+    player
+  |> String.lowercase
+
+let script = "./scripts/scrape.py"
+
+let query (player : string) (league : string) =
+  command ("python " ^ script ^ " " ^ league ^ " " ^ validate_query player)
+
 module Basketball : BBall = struct
   type bball_res = {
     adv : string;
@@ -46,8 +61,8 @@ module Basketball : BBall = struct
   }
 
   let init_bball_scrape (player : string) =
-    let soup = read_file "./data/query.html" |> parse in
-    (* Teporary static file to test basic functionality *)
+    let _ = query player "nba" in
+    let soup = read_file "./data/res.html" |> parse in
     let query = soup $ "div" in
     let result = trimmed_texts query in
     String.concat "'; '" (List.rev result)
@@ -193,11 +208,6 @@ module Football = struct
     netavg : string;
   }
 
-  (* type position = | QB of quarterback | RB of offensive | G of support | T of
-     support | OL of support | C of support | TE of hybrid | FB of offensive |
-     WR of hybrid | S of safety | DB of safety | LB of tackler | DT of tackler |
-     NT of tackler | CB of safety | K of kicker | P of punter *)
-
   type player = {
     name : string;
     position : string;
@@ -206,8 +216,8 @@ module Football = struct
   }
 
   let init_fball_scrape (player : string) =
-    let soup = read_file ("./" ^ player) |> parse in
-    (* Teporary static file to test basic functionality *)
+    let _ = query player "nfl" in
+    let soup = read_file "./data/res.html" |> parse in
     let query = soup $ "div" in
     let result = trimmed_texts query in
     String.concat "'; '" (List.rev result)
