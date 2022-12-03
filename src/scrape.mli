@@ -86,6 +86,8 @@ module type FBall = sig
         and performs string slicing to extract the proper data. *)
 
     val filter_off_scrape : string -> offensive
+    (** [filter_off_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
 
     val qback_scrape : string -> quarterback
     (** [qback_scrape p] Is the main function that runs the web scraping 
