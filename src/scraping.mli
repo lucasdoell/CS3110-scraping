@@ -1,5 +1,11 @@
 (** A web scraping functionality basic test.  *)
 
+type player
+(** The type representing a player. *)
+
+val to_string_player : player -> string
+(** [to_string_player p] is the string representation of [p].  *)
+
 module type BBall = sig
     type bball_res
     (** The type of response returned by the [bball_scrape] function. *)
@@ -14,6 +20,10 @@ module type BBall = sig
 
     val bball_scrape : string -> bball_res
     (** [bball_scrape p] Is the main function that runs the web scraping and performs the filtering. *)
+
+    val get_player_info : string -> player
+    (** [get_player_info name res] takes the result of [init_bball_scrape]
+        and slices the strings to get the information about player [name]. *)
 
     val to_string : bball_res -> string
     (** [to_string b] is the string representation of the bball_res [b]. *)
@@ -46,14 +56,11 @@ module type FBall = sig
     type punter
     (* The type of a punter. *)
 
-    type player
-    (* The type of a player. *)
-
     val init_fball_scrape : string -> string
     (** [init_fball_scrape p] is the initial string generator for the results of
         the web scraping query for player [p]. *)
 
-    val get_player_info : string -> string -> player
+    val get_player_info : string -> player
     (** [get_player_info name res] takes the result of [init_fball_scrape]
         and slices the strings to get the information about player [name]. *)
 

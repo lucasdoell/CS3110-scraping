@@ -5,12 +5,43 @@ module M = Agent.Monad
 open M.Infix
 open Sys
 
+(******************************** GLOBAL SCOPE ********************************)
+
+let validate_name (player : string) =
+  String.replace_chars
+    (function
+      | ' ' -> "-"
+      | '_' -> "-"
+      | c -> String.of_char c)
+    player
+  |> String.lowercase
+
+let script = "./scripts/scrape.py"
+
+let query (player : string) (league : string) =
+  command ("python " ^ script ^ " " ^ league ^ " " ^ validate_name player)
+
+type player = {
+  name : string;
+  position : string;
+  number : string;
+  team : string;
+}
+
+let to_string_player (player : player) =
+  "Player: " ^ player.name ^ "\n" ^ "Team: " ^ player.team ^ "\n" ^ "Position: "
+  ^ player.position ^ "\n" ^ "Number: " ^ player.number
+
+(******************************** END GLOBAL SCOPE ****************************)
+
+(******************************** MODULE TYPES ********************************)
 module type BBall = sig
   type bball_res
 
   val init_bball_scrape : string -> string
   val filter_bball_scrape : string -> bball_res
   val bball_scrape : string -> bball_res
+  val get_player_info : string -> player
   val to_string : bball_res -> string
 end
 
@@ -23,10 +54,9 @@ module type FBall = sig
   type tackler
   type kicker
   type punter
-  type player
 
   val init_fball_scrape : string -> string
-  val get_player_info : string -> string -> player
+  val get_player_info : string -> player
   val filter_qback_scrape : string -> quarterback
   val filter_off_scrape : string -> offensive
   val qback_scrape : string -> quarterback
@@ -35,19 +65,7 @@ module type FBall = sig
   val to_string_off : offensive -> string
 end
 
-let validate_query (player : string) =
-  String.replace_chars
-    (function
-      | ' ' -> "-"
-      | '_' -> "-"
-      | c -> String.of_char c)
-    player
-  |> String.lowercase
-
-let script = "./scripts/scrape.py"
-
-let query (player : string) (league : string) =
-  command ("python " ^ script ^ " " ^ league ^ " " ^ validate_query player)
+(******************************** END MODULE TYPES ****************************)
 
 module Basketball : BBall = struct
   type bball_res = {
@@ -122,6 +140,50 @@ module Basketball : BBall = struct
 
   let bball_scrape (player : string) =
     filter_bball_scrape (init_bball_scrape player)
+
+  let get_player_info player =
+    let res = init_bball_scrape player in
+    let player = player |> String.uppercase_ascii in
+    let name =
+      Substring.to_string
+        (Substring.substring res (String.find res player) (String.length player))
+    in
+    let info =
+      Substring.to_string
+        (Substring.substring res (String.find res "#")
+           (String.index_from res (String.find res "#") '\''
+           - String.find res "#"))
+    in
+    let number = Substring.to_string (Substring.substring info 1 2) in
+    let position =
+      Substring.to_string
+        (Substring.substring info
+           (String.find info "-" + 2)
+           (String.index_from info (String.find info "-" + 1) '-'
+           - String.find info "-" - 3))
+    in
+    let team =
+      Substring.to_string
+        (Substring.substring
+           (Substring.to_string
+              (Substring.substring info
+                 (String.index_from info (String.find info "-" + 1) '-'
+                 - String.find info "-" + 2)
+                 (String.length info
+                 - (String.index_from info (String.find info "-" + 1) '-'
+                   - String.find info "-" + 2))))
+           3
+           (String.length
+              (Substring.to_string
+                 (Substring.substring info
+                    (String.index_from info (String.find info "-" + 1) '-'
+                    - String.find info "-" + 2)
+                    (String.length info
+                    - (String.index_from info (String.find info "-" + 1) '-'
+                      - String.find info "-" + 3))))
+           - 2))
+    in
+    { name; position; number; team }
 
   let to_string res =
     "Scoring: " ^ res.scoring ^ "\n" ^ "Rebounding: " ^ res.reb ^ "\n"
@@ -208,13 +270,6 @@ module Football = struct
     netavg : string;
   }
 
-  type player = {
-    name : string;
-    position : string;
-    number : string;
-    team : string;
-  }
-
   let init_fball_scrape (player : string) =
     let _ = query player "nfl" in
     let soup = read_file "./data/res.html" |> parse in
@@ -222,7 +277,8 @@ module Football = struct
     let result = trimmed_texts query in
     String.concat "'; '" (List.rev result)
 
-  let get_player_info player res =
+  let get_player_info player =
+    let res = init_fball_scrape player in
     let player = player |> String.uppercase_ascii in
     let name =
       Substring.to_string
@@ -398,12 +454,6 @@ module Football = struct
     in
     { yds; att; td; ryds; rtd; recyds; rectd; kretyds; pretyds; pts; apyds }
 
-  let qback_scrape (player : string) =
-    filter_qback_scrape (init_fball_scrape player)
-
-  let off_scrape (player : string) =
-    filter_off_scrape (init_fball_scrape player)
-
   let to_string_qb (res : quarterback) =
     "YDS: " ^ res.yds ^ "\n" ^ "TD: " ^ res.td ^ "\n" ^ "INT: " ^ res.ints
     ^ "\n" ^ "PYDS: " ^ res.pyds ^ "\n" ^ "PTD: " ^ res.ptd ^ "\n" ^ "RYDS: "
@@ -415,4 +465,10 @@ module Football = struct
     ^ res.recyds ^ "\n" ^ "RECTD: " ^ res.rectd ^ "\n" ^ "K-RET YDS: "
     ^ res.kretyds ^ "\n" ^ "P-RET YDS: " ^ res.pretyds ^ "\n" ^ "PTS: "
     ^ res.pts ^ "\n" ^ "AP YDS: " ^ res.apyds
+
+  let qback_scrape (player : string) =
+    init_fball_scrape player |> filter_qback_scrape
+
+  let off_scrape (player : string) =
+    init_fball_scrape player |> filter_off_scrape
 end
