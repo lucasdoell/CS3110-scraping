@@ -4,26 +4,40 @@ open Scraping
 (* open CommandLine open ANSITerminal *)
 
 let test_command_line = ()
-let _ = print_endline "Testing HTML parsing:"
+let _ = print_endline "Testing Scraping:"
 
-let test_bball_scrape =
-  let _ = print_endline "\n➾ Testing Basketball:" in
-  let _ = print_endline "\nPlayer: Lebron James" in
-  Basketball.bball_scrape "lebron james"
-  |> Basketball.to_string |> print_endline
+let scraping_test_suite =
+  let name = "lebron james" in
+  let _ = print_endline "\n➾ Testing Basketball:\n" in
+  let _ =
+    print_endline
+      (Scrape.to_string_player (Scrape.Basketball.get_player_info name))
+  in
+  Scrape.Basketball.bball_scrape name
+  |> Scrape.Basketball.to_string |> print_endline;
 
-let test_bball_scrape2 =
-  let _ = print_endline "\nPlayer: Kevin Durant" in
-  Basketball.bball_scrape "kevin durant"
-  |> Basketball.to_string |> print_endline
+  let name = "kevin durant" in
+  let _ =
+    print_endline
+      ("\n" ^ Scrape.to_string_player (Scrape.Basketball.get_player_info name))
+  in
+  Scrape.Basketball.bball_scrape name
+  |> Scrape.Basketball.to_string |> print_endline;
 
-let test_qb_scrape =
-  let _ = print_endline "\n➾ Testing Quarterback" in
-  let _ = print_endline "\nPlayer: Tom Brady" in
-  Football.qback_scrape "tom brady" |> Football.to_string_qb |> print_endline
+  let _ = print_endline "\n➾ Testing Quarterback\n" in
+  let name = "tom brady" in
+  let _ =
+    print_endline
+      (Scrape.to_string_player (Scrape.Football.get_player_info name))
+  in
+  Scrape.Football.qback_scrape name
+  |> Scrape.Football.to_string_qb |> print_endline;
 
-let test_rb_scrape =
-  let _ = print_endline "\n➾ Testing Runningback" in
-  let _ = print_endline "\nPlayer: Leonard Fournette" in
-  Football.off_scrape "Leonard Fournette"
-  |> Football.to_string_off |> print_endline
+  let _ = print_endline "\n➾ Testing Runningback\n" in
+  let name = "leonard fournette" in
+  let _ =
+    print_endline
+      (Scrape.to_string_player (Scrape.Football.get_player_info name))
+  in
+  Scrape.Football.off_scrape name
+  |> Scrape.Football.to_string_off |> print_endline
