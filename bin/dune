@@ -1,0 +1,3 @@
+(executable 
+ (name main)
+ (libraries Scraping mechaml str batteries ANSITerminal))
