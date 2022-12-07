@@ -67,7 +67,7 @@ end
 
 (******************************** END MODULE TYPES ****************************)
 
-module Basketball : BBall = struct
+module BasketballScrape : BBall = struct
   type bball_res = {
     adv : string;
     misc : string;
@@ -192,7 +192,7 @@ module Basketball : BBall = struct
     ^ res.adv
 end
 
-module Football = struct
+module FootballScrape = struct
   type quarterback = {
     yds : string;
     td : string;

@@ -11,33 +11,33 @@ let scraping_test_suite =
   let _ = print_endline "\n➾ Testing Basketball:\n" in
   let _ =
     print_endline
-      (Scrape.to_string_player (Scrape.Basketball.get_player_info name))
+      (Scrape.to_string_player (Scrape.BasketballScrape.get_player_info name))
   in
-  Scrape.Basketball.bball_scrape name
-  |> Scrape.Basketball.to_string |> print_endline;
+  Scrape.BasketballScrape.bball_scrape name
+  |> Scrape.BasketballScrape.to_string |> print_endline;
 
   let name = "kevin durant" in
   let _ =
     print_endline
-      ("\n" ^ Scrape.to_string_player (Scrape.Basketball.get_player_info name))
+      ("\n" ^ Scrape.to_string_player (Scrape.BasketballScrape.get_player_info name))
   in
-  Scrape.Basketball.bball_scrape name
-  |> Scrape.Basketball.to_string |> print_endline;
+  Scrape.BasketballScrape.bball_scrape name
+  |> Scrape.BasketballScrape.to_string |> print_endline;
 
   let _ = print_endline "\n➾ Testing Quarterback\n" in
   let name = "tom brady" in
   let _ =
     print_endline
-      (Scrape.to_string_player (Scrape.Football.get_player_info name))
+      (Scrape.to_string_player (Scrape.FootballScrape.get_player_info name))
   in
-  Scrape.Football.qback_scrape name
-  |> Scrape.Football.to_string_qb |> print_endline;
+  Scrape.FootballScrape.qback_scrape name
+  |> Scrape.FootballScrape.to_string_qb |> print_endline;
 
   let _ = print_endline "\n➾ Testing Runningback\n" in
   let name = "leonard fournette" in
   let _ =
     print_endline
-      (Scrape.to_string_player (Scrape.Football.get_player_info name))
+      (Scrape.to_string_player (Scrape.FootballScrape.get_player_info name))
   in
-  Scrape.Football.off_scrape name
-  |> Scrape.Football.to_string_off |> print_endline
+  Scrape.FootballScrape.off_scrape name
+  |> Scrape.FootballScrape.to_string_off |> print_endline

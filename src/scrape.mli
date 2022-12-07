@@ -41,7 +41,7 @@ module type BBall = sig
     (** [to_string b] is the string representation of the bball_res [b]. *)
 end
 
-module Basketball : BBall
+module BasketballScrape : BBall
 
 module type FBall = sig
     type quarterback
@@ -106,4 +106,4 @@ module type FBall = sig
         for an offensive position. *)
 end
 
-module Football : FBall
+module FootballScrape : FBall
