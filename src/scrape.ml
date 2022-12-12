@@ -83,11 +83,13 @@ module BasketballScrape : BBall = struct
   }
 
   let init_bball_scrape (player : string) =
-    let _ = query player "nba" in
-    let soup = read_file "./data/res.html" |> parse in
-    let query = soup $ "div" in
-    let result = trimmed_texts query in
-    String.concat "'; '" (List.rev result)
+    try
+      let _ = query player "nba" in
+      let soup = read_file "./data/res.html" |> parse in
+      let query = soup $ "div" in
+      let result = trimmed_texts query in
+      String.concat "'; '" (List.rev result)
+    with _ -> raise (Failure "Error: player not found")
 
   let filter_bball_scrape res =
     let adv =
@@ -96,6 +98,7 @@ module BasketballScrape : BBall = struct
            (String.find res "'USG%'; '" + 9)
            (String.index_from res (String.find res "'USG%'; '" + 9) '\''
            - (String.find res "'USG%'; '" + 9)))
+      ^ " USG%"
     in
     let misc =
       Substring.to_string
@@ -103,13 +106,23 @@ module BasketballScrape : BBall = struct
            (String.find res "'+/-'; '" + 8)
            (String.index_from res (String.find res "'+/-'; '" + 8) '\''
            - (String.find res "'+/-'; '" + 8)))
+      ^ " +/-"
     in
     let def =
-      Substring.to_string
-        (Substring.substring res
-           (String.find res "'BPG'; '" + 8)
-           (String.index_from res (String.find res "'BPG'; '" + 8) '\''
-           - (String.find res "'BPG'; '" + 8)))
+      try
+        Substring.to_string
+          (Substring.substring res
+             (String.find res "'BPG'; '" + 8)
+             (String.index_from res (String.find res "'BPG'; '" + 8) '\''
+             - (String.find res "'BPG'; '" + 8)))
+        ^ " BPG"
+      with _ ->
+        Substring.to_string
+          (Substring.substring res
+             (String.find res "'SPG'; '" + 8)
+             (String.index_from res (String.find res "'SPG'; '" + 8) '\''
+             - (String.find res "'SPG'; '" + 8)))
+        ^ " SPG"
     in
     let assists =
       Substring.to_string
@@ -117,6 +130,7 @@ module BasketballScrape : BBall = struct
            (String.find res "'APG'; '" + 8)
            (String.index_from res (String.find res "'APG'; '" + 8) '\''
            - (String.find res "'APG'; '" + 8)))
+      ^ " APG"
     in
     let shooting =
       Substring.to_string
@@ -124,6 +138,7 @@ module BasketballScrape : BBall = struct
            (String.find res "'EFG%'; '" + 9)
            (String.index_from res (String.find res "'EFG%'; '" + 9) '\''
            - (String.find res "'EFG%'; '" + 9)))
+      ^ " EFG%"
     in
     let reb =
       Substring.to_string
@@ -131,6 +146,7 @@ module BasketballScrape : BBall = struct
            (String.find res "'RPG'; '" + 8)
            (String.index_from res (String.find res "'RPG'; '" + 8) '\''
            - (String.find res "'RPG'; '" + 8)))
+      ^ " RPG"
     in
     let scoring =
       Substring.to_string
@@ -138,6 +154,7 @@ module BasketballScrape : BBall = struct
            (String.find res "'PPG'; '" + 8)
            (String.index_from res (String.find res "'PPG'; '" + 8) '\''
            - (String.find res "'PPG'; '" + 8)))
+      ^ " PPG"
     in
 
     { adv; misc; def; assists; shooting; reb; scoring }
@@ -275,11 +292,13 @@ module FootballScrape = struct
   }
 
   let init_fball_scrape (player : string) =
-    let _ = query player "nfl" in
-    let soup = read_file "./data/res.html" |> parse in
-    let query = soup $ "div" in
-    let result = trimmed_texts query in
-    String.concat "'; '" (List.rev result)
+    try
+      let _ = query player "nfl" in
+      let soup = read_file "./data/res.html" |> parse in
+      let query = soup $ "div" in
+      let result = trimmed_texts query in
+      String.concat "'; '" (List.rev result)
+    with _ -> raise (Failure "Player not found")
 
   let get_player_info player =
     let res = init_fball_scrape player in
