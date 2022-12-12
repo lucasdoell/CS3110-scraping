@@ -77,6 +77,7 @@ module type FBall = sig
   val tackler_scrape : string -> tackler
   val kicker_scrape : string -> kicker
   val punter_scrape : string -> punter
+  val fball_scrape : string -> string
   val to_string_qb : quarterback -> string
   val to_string_off : offensive -> string
   val to_string_supp : support -> string
@@ -820,4 +821,25 @@ module FootballScrape = struct
 
   let punter_scrape (player : string) =
     init_fball_scrape player |> filter_punter_scrape
+
+  let fball_scrape (player : string) =
+    match (get_player_info player).position with
+    | "QUARTERBACK" -> qback_scrape player |> to_string_qb
+    | "RUNNING BACK" -> off_scrape player |> to_string_off
+    | "FULLBACK" -> off_scrape player |> to_string_off
+    | "GUARD" -> supp_scrape player |> to_string_supp
+    | "TACKLE" -> supp_scrape player |> to_string_supp
+    | "OFFENSIVE LINEMAN" -> supp_scrape player |> to_string_supp
+    | "CENTER" -> supp_scrape player |> to_string_supp
+    | "WIDE RECEIVER" -> hybrid_scrape player |> to_string_hybrid
+    | "TIGHT END" -> hybrid_scrape player |> to_string_hybrid
+    | "SAFETY" -> safety_scrape player |> to_string_safety
+    | "DEFENSIVE BACK" -> safety_scrape player |> to_string_safety
+    | "LINEBACKER" -> tackler_scrape player |> to_string_tackler
+    | "DEFENSIVE TACKLE" -> tackler_scrape player |> to_string_tackler
+    | "NOSE TACKLE" -> tackler_scrape player |> to_string_tackler
+    | "CORNERBACK" -> safety_scrape player |> to_string_safety
+    | "KICKER" -> kicker_scrape player |> to_string_kicker
+    | "PUNTER" -> punter_scrape player |> to_string_punter
+    | _ -> "No stats found for " ^ player ^ "."
 end
