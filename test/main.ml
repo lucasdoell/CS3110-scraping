@@ -1,3 +1,36 @@
+(****************************************************************
+
+  Scraping.ml Testing Plan
+
+  The testing methodology for this project is to show that the program is
+  capable of scraping stats from the web and displaying them in a user-friendly
+  manner. The program is tested by running the program with a variety of players
+  and positions. The expected output can be verified by visiting the website for
+  each player and comparing the output to the website's stats. Each position is
+  tested with multiple players to ensure that the program is capable of scraping
+  stats for a variety of players.
+
+  We attempted to use OUnit2 for our testing, but we were unable to display
+  testing data in a user-friendly manner. We were able to run each test, but due
+  to OUnit2 running each test concurrently, the output was not readable. To
+  compensate for this, we decided to instead display each test using print
+  statements. This allowed us to display the output in a readable manner, and we
+  were able to verify that the program was working as expected.
+
+  Test cases were developed by choosing a player in each position and testing
+  the program with that player. We then chose another player in the same
+  position and tested the program with that player. We continued this process
+  until we were satisfied that the program was working as expected. We then
+  moved on to the next position and repeated the process. For the basketball
+  player tests, we simply chose a basketball player at random, as there is very
+  little difference in the stats for each position. The only difference is the
+  name of the defensive stat, which is accounted for.
+
+  There are a total of 77 passing tests. We are confident in saying that this
+  proves the correctness of our program.
+
+  ****************************************************************)
+
 open Mechaml
 open OUnit2
 open Scraping
