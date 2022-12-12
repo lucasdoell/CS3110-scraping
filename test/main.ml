@@ -37,6 +37,66 @@ let off_test (player : string) =
     |> Scrape.FootballScrape.to_string_off |> print_endline
   with _ -> print_endline ("Player " ^ player ^ " not found.")
 
+let supp_test (player : string) =
+  try
+    let _ =
+      print_endline
+        (Scrape.to_string_player (Scrape.FootballScrape.get_player_info player))
+    in
+    Scrape.FootballScrape.supp_scrape player
+    |> Scrape.FootballScrape.to_string_supp |> print_endline
+  with _ -> print_endline ("Player " ^ player ^ " not found.")
+
+let hybrid_test (player : string) =
+  try
+    let _ =
+      print_endline
+        (Scrape.to_string_player (Scrape.FootballScrape.get_player_info player))
+    in
+    Scrape.FootballScrape.hybrid_scrape player
+    |> Scrape.FootballScrape.to_string_hybrid |> print_endline
+  with _ -> print_endline ("Player " ^ player ^ " not found.")
+
+let safety_test (player : string) =
+  try
+    let _ =
+      print_endline
+        (Scrape.to_string_player (Scrape.FootballScrape.get_player_info player))
+    in
+    Scrape.FootballScrape.safety_scrape player
+    |> Scrape.FootballScrape.to_string_safety |> print_endline
+  with _ -> print_endline ("Player " ^ player ^ " not found.")
+
+let tackler_test (player : string) =
+  try
+    let _ =
+      print_endline
+        (Scrape.to_string_player (Scrape.FootballScrape.get_player_info player))
+    in
+    Scrape.FootballScrape.tackler_scrape player
+    |> Scrape.FootballScrape.to_string_tackler |> print_endline
+  with _ -> print_endline ("Player " ^ player ^ " not found.")
+
+let kicker_test (player : string) =
+  try
+    let _ =
+      print_endline
+        (Scrape.to_string_player (Scrape.FootballScrape.get_player_info player))
+    in
+    Scrape.FootballScrape.kicker_scrape player
+    |> Scrape.FootballScrape.to_string_kicker |> print_endline
+  with _ -> print_endline ("Player " ^ player ^ " not found.")
+
+let punter_test (player : string) =
+  try
+    let _ =
+      print_endline
+        (Scrape.to_string_player (Scrape.FootballScrape.get_player_info player))
+    in
+    Scrape.FootballScrape.punter_scrape player
+    |> Scrape.FootballScrape.to_string_punter |> print_endline
+  with _ -> print_endline ("Player " ^ player ^ " not found.")
+
 let scraping_test_suite =
   let _ = print_endline "\n➾ Testing Basketball:\n" in
   let _ = bball_test "lebron james" in
@@ -122,6 +182,74 @@ let scraping_test_suite =
   let _ = off_test "derrick henry" in
   let _ = print_endline "\n" in
   let _ = off_test "nick chubb" in
+  let _ = print_endline "\n" in
+
+  let _ = print_endline "\n➾ Testing Support\n" in
+  let _ = supp_test "greg van roten" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "ryan van demark" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "ryan bates" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "alec anderson" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "spencer brown" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "dion dawkins" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "tommy doyle" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "bobby hart" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "mitch morse" in
+  let _ = print_endline "\n" in
+  let _ = supp_test "justin murray" in
+  let _ = print_endline "\n" in
+
+  let _ = print_endline "\n➾ Testing Hybrid\n" in
+  let _ = hybrid_test "tommy sweeney" in
+  let _ = print_endline "\n" in
+  let _ = hybrid_test "dawson knox" in
+  let _ = print_endline "\n" in
+  let _ = hybrid_test "quintin morris" in
+  let _ = print_endline "\n" in
+  let _ = hybrid_test "jake kumerow" in
+  let _ = print_endline "\n" in
+  let _ = hybrid_test "isaiah mckenzie" in
+  let _ = print_endline "\n" in
+  let _ = hybrid_test "keesean johnson" in
+  let _ = print_endline "\n" in
+  let _ = hybrid_test "tanner gentry" in
+  let _ = print_endline "\n" in
+
+  let _ = print_endline "\n➾ Testing Safety\n" in
+  let _ = safety_test "damar hamlin" in
+  let _ = print_endline "\n" in
+  let _ = safety_test "micah hyde" in
+  let _ = print_endline "\n" in
+  let _ = safety_test "jaquan johnson" in
+  let _ = print_endline "\n" in
+  let _ = safety_test "dean marlowe" in
+  let _ = print_endline "\n" in
+  let _ = safety_test "jordan poyer" in
+  let _ = print_endline "\n" in
+  let _ = safety_test "kyler mcmichael" in
+  let _ = print_endline "\n" in
+  let _ = safety_test "siran neal" in
+  let _ = print_endline "\n" in
+
+  let _ = print_endline "\n➾ Testing Tackler\n" in
+  let _ = tackler_test "tyler matakevich" in
+  let _ = print_endline "\n" in
+  let _ = tackler_test "ed oliver" in
+  let _ = print_endline "\n" in
+
+  let _ = print_endline "\n➾ Testing Kicker\n" in
+  let _ = kicker_test "tyler bass" in
+  let _ = print_endline "\n" in
+
+  let _ = print_endline "\n➾ Testing Punter\n" in
+  let _ = punter_test "sam martin" in
   let _ = print_endline "\n" in
 
   let _ = print_endline "\n➾ Testing Unknown Players\n" in

@@ -63,10 +63,28 @@ module type FBall = sig
   val get_player_info : string -> player
   val filter_qback_scrape : string -> quarterback
   val filter_off_scrape : string -> offensive
+  val filter_supp_scrape : string -> support
+  val filter_hybrid_scrape : string -> hybrid
+  val filter_safety_scrape : string -> safety
+  val filter_tackler_scrape : string -> tackler
+  val filter_kicker_scrape : string -> kicker
+  val filter_punter_scrape : string -> punter
   val qback_scrape : string -> quarterback
   val off_scrape : string -> offensive
+  val supp_scrape : string -> support
+  val hybrid_scrape : string -> hybrid
+  val safety_scrape : string -> safety
+  val tackler_scrape : string -> tackler
+  val kicker_scrape : string -> kicker
+  val punter_scrape : string -> punter
   val to_string_qb : quarterback -> string
   val to_string_off : offensive -> string
+  val to_string_supp : support -> string
+  val to_string_hybrid : hybrid -> string
+  val to_string_safety : safety -> string
+  val to_string_tackler : tackler -> string
+  val to_string_kicker : kicker -> string
+  val to_string_punter : punter -> string
 end
 
 (******************************** END MODULE TYPES ****************************)
@@ -247,10 +265,10 @@ module FootballScrape = struct
     yds : string;
     recs : string;
     td : string;
-    recyds : string;
-    rectd : string;
     ryds : string;
     rtd : string;
+    recyds : string;
+    rectd : string;
     kretyds : string;
     pretyds : string;
     pts : string;
@@ -477,6 +495,269 @@ module FootballScrape = struct
     in
     { yds; att; td; ryds; rtd; recyds; rectd; kretyds; pretyds; pts; apyds }
 
+  let filter_supp_scrape res =
+    let gs =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'GS'; '" + 7)
+           (String.index_from res (String.find res "'GS'; '" + 7) '\''
+           - (String.find res "'GS'; '" + 7)))
+    in
+    let gp =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'GP'; '" + 7)
+           (String.index_from res (String.find res "'GP'; '" + 7) '\''
+           - (String.find res "'GP'; '" + 7)))
+    in
+    { gs; gp }
+
+  let filter_hybrid_scrape res =
+    let yds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'YDS'; '" + 8)
+           (String.index_from res (String.find res "'YDS'; '" + 8) '\''
+           - (String.find res "'YDS'; '" + 8)))
+    in
+    let recs =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'REC'; '" + 8)
+           (String.index_from res (String.find res "'REC'; '" + 8) '\''
+           - (String.find res "'REC'; '" + 8)))
+    in
+    let td =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'TD'; '" + 7)
+           (String.index_from res (String.find res "'TD'; '" + 7) '\''
+           - (String.find res "'TD'; '" + 7)))
+    in
+    let ryds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'RYDS'; '" + 9)
+           (String.index_from res (String.find res "'RYDS'; '" + 9) '\''
+           - (String.find res "'RYDS'; '" + 9)))
+    in
+    let rtd =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'RTD'; '" + 8)
+           (String.index_from res (String.find res "'RTD'; '" + 8) '\''
+           - (String.find res "'RTD'; '" + 8)))
+    in
+    let recyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'RECYDS'; '" + 11)
+           (String.index_from res (String.find res "'RECYDS'; '" + 11) '\''
+           - (String.find res "'RECYDS'; '" + 11)))
+    in
+    let rectd =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'RECTD'; '" + 10)
+           (String.index_from res (String.find res "'RECTD'; '" + 10) '\''
+           - (String.find res "'RECTD'; '" + 10)))
+    in
+    let kretyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'K-RET YDS'; '" + 14)
+           (String.index_from res (String.find res "'K-RET YDS'; '" + 14) '\''
+           - (String.find res "'K-RET YDS'; '" + 14)))
+    in
+    let pretyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'P-RET YDS'; '" + 14)
+           (String.index_from res (String.find res "'P-RET YDS'; '" + 14) '\''
+           - (String.find res "'P-RET YDS'; '" + 14)))
+    in
+    let pts =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'PTS'; '" + 8)
+           (String.index_from res (String.find res "'PTS'; '" + 8) '\''
+           - (String.find res "'PTS'; '" + 8)))
+    in
+    let apyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'AP YDS'; '" + 11)
+           (String.index_from res (String.find res "'AP YDS'; '" + 11) '\''
+           - (String.find res "'AP YDS'; '" + 11)))
+    in
+    { yds; recs; td; ryds; rtd; recyds; rectd; kretyds; pretyds; pts; apyds }
+
+  let filter_safety_scrape res =
+    let tckl =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'TCKL'; '" + 9)
+           (String.index_from res (String.find res "'TCKL'; '" + 9) '\''
+           - (String.find res "'TCKL'; '" + 9)))
+    in
+    let ints =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'INT'; '" + 8)
+           (String.index_from res (String.find res "'INT'; '" + 8) '\''
+           - (String.find res "'INT'; '" + 8)))
+    in
+    let sck =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'SCK'; '" + 8)
+           (String.index_from res (String.find res "'SCK'; '" + 8) '\''
+           - (String.find res "'SCK'; '" + 8)))
+    in
+    let kretyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'K-RET YDS'; '" + 14)
+           (String.index_from res (String.find res "'K-RET YDS'; '" + 14) '\''
+           - (String.find res "'K-RET YDS'; '" + 14)))
+    in
+    let pretyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'P-RET YDS'; '" + 14)
+           (String.index_from res (String.find res "'P-RET YDS'; '" + 14) '\''
+           - (String.find res "'P-RET YDS'; '" + 14)))
+    in
+    let pts =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'PTS'; '" + 8)
+           (String.index_from res (String.find res "'PTS'; '" + 8) '\''
+           - (String.find res "'PTS'; '" + 8)))
+    in
+    let apyds =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'AP YDS'; '" + 11)
+           (String.index_from res (String.find res "'AP YDS'; '" + 11) '\''
+           - (String.find res "'AP YDS'; '" + 11)))
+    in
+    { tckl; ints; sck; kretyds; pretyds; pts; apyds }
+
+  let filter_tackler_scrape res =
+    let tckl =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'TCKL'; '" + 9)
+           (String.index_from res (String.find res "'TCKL'; '" + 9) '\''
+           - (String.find res "'TCKL'; '" + 9)))
+    in
+    let ints =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'INT'; '" + 8)
+           (String.index_from res (String.find res "'INT'; '" + 8) '\''
+           - (String.find res "'INT'; '" + 8)))
+    in
+    let sck =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'SCK'; '" + 8)
+           (String.index_from res (String.find res "'SCK'; '" + 8) '\''
+           - (String.find res "'SCK'; '" + 8)))
+    in
+    { tckl; ints; sck }
+
+  let filter_kicker_scrape res =
+    let fga =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'FGA'; '" + 8)
+           (String.index_from res (String.find res "'FGA'; '" + 8) '\''
+           - (String.find res "'FGA'; '" + 8)))
+    in
+    let fgm =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'FGM'; '" + 8)
+           (String.index_from res (String.find res "'FGM'; '" + 8) '\''
+           - (String.find res "'FGM'; '" + 8)))
+    in
+    let pat =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'PAT'; '" + 8)
+           (String.index_from res (String.find res "'PAT'; '" + 8) '\''
+           - (String.find res "'PAT'; '" + 8)))
+    in
+    let pts =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'PTS'; '" + 8)
+           (String.index_from res (String.find res "'PTS'; '" + 8) '\''
+           - (String.find res "'PTS'; '" + 8)))
+    in
+    let tb =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'TB %'; '" + 9)
+           (String.index_from res (String.find res "'TB %'; '" + 9) '\''
+           - (String.find res "'TB %'; '" + 9)))
+    in
+    let netavg =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'NET AVG'; '" + 12)
+           (String.index_from res (String.find res "'NET AVG'; '" + 12) '\''
+           - (String.find res "'NET AVG'; '" + 12)))
+    in
+    { fga; fgm; pat; pts; tb; netavg }
+
+  let filter_punter_scrape res =
+    let avg =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'AVG'; '" + 8)
+           (String.index_from res (String.find res "'AVG'; '" + 8) '\''
+           - (String.find res "'AVG'; '" + 8)))
+    in
+    let punts =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'PUNTS'; '" + 10)
+           (String.index_from res (String.find res "'PUNTS'; '" + 10) '\''
+           - (String.find res "'PUNTS'; '" + 10)))
+    in
+    let in20 =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'IN20'; '" + 9)
+           (String.index_from res (String.find res "'IN20'; '" + 9) '\''
+           - (String.find res "'IN20'; '" + 9)))
+    in
+    let pts =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'PTS'; '" + 8)
+           (String.index_from res (String.find res "'PTS'; '" + 8) '\''
+           - (String.find res "'PTS'; '" + 8)))
+    in
+    let tb =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'TB %'; '" + 9)
+           (String.index_from res (String.find res "'TB %'; '" + 9) '\''
+           - (String.find res "'TB %'; '" + 9)))
+    in
+    let netavg =
+      Substring.to_string
+        (Substring.substring res
+           (String.find res "'NET AVG'; '" + 12)
+           (String.index_from res (String.find res "'NET AVG'; '" + 12) '\''
+           - (String.find res "'NET AVG'; '" + 12)))
+    in
+    { avg; punts; in20; pts; tb; netavg }
+
   let to_string_qb (res : quarterback) =
     "YDS: " ^ res.yds ^ "\n" ^ "TD: " ^ res.td ^ "\n" ^ "INT: " ^ res.ints
     ^ "\n" ^ "PYDS: " ^ res.pyds ^ "\n" ^ "PTD: " ^ res.ptd ^ "\n" ^ "RYDS: "
@@ -489,9 +770,54 @@ module FootballScrape = struct
     ^ res.kretyds ^ "\n" ^ "P-RET YDS: " ^ res.pretyds ^ "\n" ^ "PTS: "
     ^ res.pts ^ "\n" ^ "AP YDS: " ^ res.apyds
 
+  let to_string_supp (res : support) = "GS: " ^ res.gs ^ "\n" ^ "GP: " ^ res.gp
+
+  let to_string_hybrid (res : hybrid) =
+    "YDS: " ^ res.yds ^ "\n" ^ "REC: " ^ res.recs ^ "\n" ^ "TD: " ^ res.td
+    ^ "\n" ^ "RYDS: " ^ res.ryds ^ "\n" ^ "RTD: " ^ res.rtd ^ "\n" ^ "RECYDS: "
+    ^ res.recyds ^ "\n" ^ "RECTD: " ^ res.rectd ^ "\n" ^ "K-RET YDS: "
+    ^ res.kretyds ^ "\n" ^ "P-RET YDS: " ^ res.pretyds ^ "\n" ^ "PTS: "
+    ^ res.pts ^ "\n" ^ "AP YDS: " ^ res.apyds
+
+  let to_string_safety (res : safety) =
+    "TCKL: " ^ res.tckl ^ "\n" ^ "INT: " ^ res.ints ^ "\n" ^ "SCK: " ^ res.sck
+    ^ "\n" ^ "K-RET YDS: " ^ res.kretyds ^ "\n" ^ "P-RET YDS: " ^ res.pretyds
+    ^ "\n" ^ "PTS: " ^ res.pts ^ "\n" ^ "AP YDS: " ^ res.apyds
+
+  let to_string_tackler (res : tackler) =
+    "TCKL: " ^ res.tckl ^ "\n" ^ "INT: " ^ res.ints ^ "\n" ^ "SCK: " ^ res.sck
+
+  let to_string_kicker (res : kicker) =
+    "FGA: " ^ res.fga ^ "\n" ^ "FGM: " ^ res.fgm ^ "\n" ^ "PAT: " ^ res.pat
+    ^ "\n" ^ "PTS: " ^ res.pts ^ "\n" ^ "TB %: " ^ res.tb ^ "\n" ^ "NET AVG: "
+    ^ res.netavg
+
+  let to_string_punter (res : punter) =
+    "AVG: " ^ res.avg ^ "\n" ^ "PUNTS: " ^ res.punts ^ "\n" ^ "IN20: "
+    ^ res.in20 ^ "\n" ^ "PTS: " ^ res.pts ^ "\n" ^ "TB %: " ^ res.tb ^ "\n"
+    ^ "NET AVG: " ^ res.netavg
+
   let qback_scrape (player : string) =
     init_fball_scrape player |> filter_qback_scrape
 
   let off_scrape (player : string) =
     init_fball_scrape player |> filter_off_scrape
+
+  let supp_scrape (player : string) =
+    init_fball_scrape player |> filter_supp_scrape
+
+  let hybrid_scrape (player : string) =
+    init_fball_scrape player |> filter_hybrid_scrape
+
+  let safety_scrape (player : string) =
+    init_fball_scrape player |> filter_safety_scrape
+
+  let tackler_scrape (player : string) =
+    init_fball_scrape player |> filter_tackler_scrape
+
+  let kicker_scrape (player : string) =
+    init_fball_scrape player |> filter_kicker_scrape
+
+  let punter_scrape (player : string) =
+    init_fball_scrape player |> filter_punter_scrape
 end

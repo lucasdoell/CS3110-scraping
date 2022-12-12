@@ -89,12 +89,60 @@ module type FBall = sig
     (** [filter_off_scrape str] takes the result of [init_fball_scrape]
         and performs string slicing to extract the proper data. *)
 
+    val filter_supp_scrape : string -> support
+    (** [filter_supp_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
+
+    val filter_hybrid_scrape : string -> hybrid
+    (** [filter_hybrid_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
+
+    val filter_safety_scrape : string -> safety
+    (** [filter_safety_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
+
+    val filter_tackler_scrape : string -> tackler
+    (** [filter_tackler_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
+
+    val filter_kicker_scrape : string -> kicker
+    (** [filter_kicker_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
+
+    val filter_punter_scrape : string -> punter
+    (** [filter_punter_scrape str] takes the result of [init_fball_scrape]
+        and performs string slicing to extract the proper data. *)
+
     val qback_scrape : string -> quarterback
-    (** [qback_scrape p] Is the main function that runs the web scraping 
+    (** [qback_scrape p] is the main function that runs the web scraping 
         and performs the filtering. *)
 
     val off_scrape : string -> offensive
-    (** [off_scrape p] Is the main function that runs the web scraping and 
+    (** [off_scrape p] is the main function that runs the web scraping and 
+        performs the filtering. *)
+
+    val supp_scrape : string -> support
+    (** [supp_scrape p] is the main function that runs the web scraping and 
+        performs the filtering. *)
+
+    val hybrid_scrape : string -> hybrid
+    (** [hybrid_scrape p] is the main function that runs the web scraping and 
+        performs the filtering. *)
+
+    val safety_scrape : string -> safety
+    (** [safety_scrape p] is the main function that runs the web scraping and 
+        performs the filtering. *)
+
+    val tackler_scrape : string -> tackler
+    (** [tackler_scrape p] is the main function that runs the web scraping and 
+        performs the filtering. *)
+
+    val kicker_scrape : string -> kicker
+    (** [kicker_scrape p] is the main function that runs the web scraping and 
+        performs the filtering. *)
+
+    val punter_scrape : string -> punter
+    (** [punter_scrape p] is the main function that runs the web scraping and 
         performs the filtering. *)
 
     val to_string_qb : quarterback -> string
@@ -104,6 +152,30 @@ module type FBall = sig
     val to_string_off : offensive -> string
     (** [to_string_off b] is the string representation of the fball_res [b] 
         for an offensive position. *)
+
+    val to_string_supp : support -> string
+    (** [to_string_supp b] is the string representation of the fball_res [b] 
+        for a supporting position. *)
+
+    val to_string_hybrid : hybrid -> string
+    (** [to_string_hybrid b] is the string representation of the fball_res [b] 
+        for a hybrid position. *)
+
+    val to_string_safety : safety -> string
+    (** [to_string_safety b] is the string representation of the fball_res [b] 
+        for a safety position. *)
+
+    val to_string_tackler : tackler -> string
+    (** [to_string_tackler b] is the string representation of the fball_res [b] 
+        for a tackler position. *)
+
+    val to_string_kicker : kicker -> string
+    (** [to_string_kicker b] is the string representation of the fball_res [b] 
+        for a kicker position. *)
+
+    val to_string_punter : punter -> string
+    (** [to_string_punter b] is the string representation of the fball_res [b] 
+        for a punter position. *)
 end
 
 module FootballScrape : FBall
