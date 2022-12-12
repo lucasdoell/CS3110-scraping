@@ -18,8 +18,13 @@ let validate_name (player : string) =
 
 let script = "./scripts/scrape.py"
 
+
 let query (player : string) (league : string) =
-  command ("python " ^ script ^ " " ^ league ^ " " ^ validate_name player)
+  let cmd = "python " ^ script ^ " " ^ league ^ " " ^ validate_name player in
+  try
+    let exit_code = Sys.command cmd in
+    if exit_code <> 0 then raise (Failure "Error: player not found")
+  with _ -> raise (Failure "Error: player not found")
 
 type player = {
   name : string;

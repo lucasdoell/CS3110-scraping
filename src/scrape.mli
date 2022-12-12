@@ -5,7 +5,7 @@ val validate_name : string -> string
 (** [validate_name name] is the name of a given player's [name] converted 
     to a URL-safe string. *) 
 
-val query : string -> string -> int
+val query : string -> string -> unit
 (** [query player league] calls the Python script scrape.py and performs a 
     query to search the given league for a player with the given name. 
     It outputs the website's content to [data/res.html] to parse using 
