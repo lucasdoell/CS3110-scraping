@@ -18,7 +18,6 @@ let validate_name (player : string) =
 
 let script = "./scripts/scrape.py"
 
-
 let query (player : string) (league : string) =
   let cmd = "python " ^ script ^ " " ^ league ^ " " ^ validate_name player in
   try
