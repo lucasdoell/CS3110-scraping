@@ -62,7 +62,8 @@ and basketball () =
                         let s = compare_second () in
                         let st2 = BasketballScrape.bball_scrape s in
                         let stat = request_basketball_stat () in
-                        print_endline ("\n\n" ^ BasketballScrape.compare f s st1 st2 stat)) with
+                        print_endline ("\n\n" ^ BasketballScrape.compare f s st1 st2 stat);
+                        basketball () ) with
                         | Failure _ -> print_endline "\nThat player does not exist in the current league";
                                        basketball ())
   | "back" -> main ()
