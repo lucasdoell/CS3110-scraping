@@ -1,3 +1,4 @@
 (executable 
  (name interface)
+ (public_name Interface)
  (libraries Scraping mechaml str batteries ANSITerminal))

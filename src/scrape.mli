@@ -40,6 +40,11 @@ module type BBall = sig
 
     val to_string : bball_res -> string
     (** [to_string b] is the string representation of the bball_res [b]. *)
+
+    val stat : bball_res -> string -> string
+    (** [stat player s] returns the requested stat [s] of [player]. *)
+
+    val compare : string -> string -> bball_res -> bball_res -> string -> string
 end
 
 module BasketballScrape : BBall

@@ -5,13 +5,26 @@ let is_sport sp =
   sp = "basketball" || sp = "baseball" || sp = "hockey" || sp = "soccer"
   || sp = "football"
 
-module Basketball = struct
+type info = {
+  name : string;
+  number : string;
+  team : string;
+  position : string;
+}
+
+module type Bas = sig
+  
+  type player
+
+  val stat : player -> string -> string
+
+  val compare : string -> string -> player -> player -> string -> string
+
+end
+
+module Basketball : Bas = struct
 
   type player = {
-    name : string;
-    number : string;
-    team : string;
-    position : string;
     adv : string;
     misc : string;
     def : string;
@@ -22,42 +35,37 @@ module Basketball = struct
   }
 
   let stat (p : player) st =
-    if st = "name" then p.name
-    else if st = "number" then p.number
-    else if st = "team" then p.team
-    else if st = "position" then p.position
-    else if st = "usg" then p.adv
-    else if st = "plus minus" then p.misc
-    else if st = "steals" then p.def
-    else if st = "assists" then p.assists
+    if st = "usg" then p.adv
+    else if st = "+/-" then p.misc
+    else if st = "spg" then p.def
+    else if st = "apg" then p.assists
     else if st = "efg" then p.shooting
-    else if st = "rebounds" then p.reb
-    else if st = "points" then p.scoring
+    else if st = "rpg" then p.reb
+    else if st = "ppg" then p.scoring
     else raise (UnknownStat st)
 
-  let compare (p1 : player) (p2 : player) st =
+  let compare (n1 : string) (n2 : string) p1 p2 st =
     try
-    if st = "name" || st = "team" || st = "position" then "can't compare " ^ st
-    else if float_of_string_opt (stat p1 st) = None 
+    if float_of_string_opt (stat p1 st) = None 
       && float_of_string_opt (stat p2 st) = None 
-      then "Neither " ^ p1.name ^ " nor " ^ p2.name ^ " has a " ^ st ^ " stat."
+      then "Neither " ^ n1 ^ " nor " ^ n2 ^ " has a " ^ st ^ " stat."
     else if float_of_string_opt (stat p1 st) = None
       && float_of_string_opt (stat p2 st) != None
-      then p1.name ^ " doesn't have a " ^ st ^ " stat and " ^ p2.name ^ " has "
+      then n1 ^ " doesn't have a " ^ st ^ " stat and " ^ n2 ^ " has "
       ^ (stat p2 st) ^ " " ^ st ^ "."
     else if float_of_string_opt (stat p1 st) != None
       && float_of_string_opt (stat p2 st) = None
-      then p2.name ^ " doesn't have a " ^ st ^ " stat and " ^ p1.name ^ " has "
+      then n2 ^ " doesn't have a " ^ st ^ " stat and " ^ n1 ^ " has "
       ^ (stat p1 st) ^ " " ^ st ^ "."
     else if float_of_string (stat p1 st) > float_of_string (stat p2 st)
-      then p1.name ^ " has higher " ^ st ^ " than " ^ p2.name ^ ". " ^ p1.name ^
-      " has " ^ (stat p1 st) ^ " " ^ st ^ " and " ^ p2.name ^ " has "
+      then n1 ^ " has higher " ^ st ^ " than " ^ n2 ^ ". " ^ n1 ^
+      " has " ^ (stat p1 st) ^ " " ^ st ^ " and " ^ n2 ^ " has "
       ^ (stat p2 st) ^ " " ^ st ^ "."
     else if float_of_string (stat p1 st) < float_of_string (stat p2 st)
-      then p2.name ^ " has higher " ^ st ^ " than " ^ p1.name ^ ". " ^ p2.name ^
-      " has " ^ (stat p2 st) ^ " " ^ st ^ " and " ^ p1.name ^ " has "
+      then n2 ^ " has higher " ^ st ^ " than " ^ n1 ^ ". " ^ n2 ^
+      " has " ^ (stat p2 st) ^ " " ^ st ^ " and " ^ n1 ^ " has "
       ^ (stat p1 st) ^ " " ^ st ^ "."
-    else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
+    else n1 ^ " and " ^ n2 ^ " have the same " ^ st ^ " with "
       ^ (stat p1 st) ^ "."
     with 
     | UnknownStat st -> "That's not a supported stat."
@@ -339,7 +347,7 @@ module Soccer = struct
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (player_stat p1 st) ^ "."  
     with 
-    | UnknownSport st -> "That's not a supported stat."
+    | UnknownStat st -> "That's not a supported stat."
 
 end
 
@@ -498,7 +506,7 @@ module Football = struct
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (offense_stat p1 st) ^ "."  
     with 
-    | UnknownSport st -> "That's not a supported stat."
+    | UnknownStat st -> "That's not a supported stat."
 
   let compare_defense (p1 : defense) (p2 : defense) st =
     try
@@ -525,7 +533,7 @@ module Football = struct
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (defense_stat p1 st) ^ "."  
     with
-    | UnknownSport st -> "That's not a supported stat."
+    | UnknownStat st -> "That's not a supported stat."
 
   let compare_special (p1 : special) (p2 : special) st =
     try
@@ -552,6 +560,6 @@ module Football = struct
     else p1.name ^ " and " ^ p2.name ^ " have the same " ^ st ^ " with "
       ^ (special_stat p1 st) ^ "."  
     with
-    | UnknownSport st -> "That's not a supported stat."
+    | UnknownStat st -> "That's not a supported stat."
 
 end

@@ -7,6 +7,8 @@ open Sys
 
 (******************************** GLOBAL SCOPE ********************************)
 
+exception UnknownStat of string
+
 let validate_name (player : string) =
   String.replace_chars
     (function
@@ -47,6 +49,8 @@ module type BBall = sig
   val bball_scrape : string -> bball_res
   val get_player_info : string -> player
   val to_string : bball_res -> string
+  val stat : bball_res -> string -> string
+  val compare : string -> string -> bball_res -> bball_res -> string -> string
 end
 
 module type FBall = sig
@@ -117,7 +121,6 @@ module BasketballScrape : BBall = struct
            (String.find res "'USG%'; '" + 9)
            (String.index_from res (String.find res "'USG%'; '" + 9) '\''
            - (String.find res "'USG%'; '" + 9)))
-      ^ " USG%"
     in
     let misc =
       Substring.to_string
@@ -125,7 +128,6 @@ module BasketballScrape : BBall = struct
            (String.find res "'+/-'; '" + 8)
            (String.index_from res (String.find res "'+/-'; '" + 8) '\''
            - (String.find res "'+/-'; '" + 8)))
-      ^ " +/-"
     in
     let def =
       try
@@ -134,14 +136,12 @@ module BasketballScrape : BBall = struct
              (String.find res "'BPG'; '" + 8)
              (String.index_from res (String.find res "'BPG'; '" + 8) '\''
              - (String.find res "'BPG'; '" + 8)))
-        ^ " BPG"
       with _ ->
         Substring.to_string
           (Substring.substring res
              (String.find res "'SPG'; '" + 8)
              (String.index_from res (String.find res "'SPG'; '" + 8) '\''
              - (String.find res "'SPG'; '" + 8)))
-        ^ " SPG"
     in
     let assists =
       Substring.to_string
@@ -149,7 +149,6 @@ module BasketballScrape : BBall = struct
            (String.find res "'APG'; '" + 8)
            (String.index_from res (String.find res "'APG'; '" + 8) '\''
            - (String.find res "'APG'; '" + 8)))
-      ^ " APG"
     in
     let shooting =
       Substring.to_string
@@ -157,7 +156,6 @@ module BasketballScrape : BBall = struct
            (String.find res "'EFG%'; '" + 9)
            (String.index_from res (String.find res "'EFG%'; '" + 9) '\''
            - (String.find res "'EFG%'; '" + 9)))
-      ^ " EFG%"
     in
     let reb =
       Substring.to_string
@@ -165,7 +163,6 @@ module BasketballScrape : BBall = struct
            (String.find res "'RPG'; '" + 8)
            (String.index_from res (String.find res "'RPG'; '" + 8) '\''
            - (String.find res "'RPG'; '" + 8)))
-      ^ " RPG"
     in
     let scoring =
       Substring.to_string
@@ -173,7 +170,6 @@ module BasketballScrape : BBall = struct
            (String.find res "'PPG'; '" + 8)
            (String.index_from res (String.find res "'PPG'; '" + 8) '\''
            - (String.find res "'PPG'; '" + 8)))
-      ^ " PPG"
     in
 
     { adv; misc; def; assists; shooting; reb; scoring }
@@ -226,10 +222,46 @@ module BasketballScrape : BBall = struct
     { name; position; number; team }
 
   let to_string res =
-    "Scoring: " ^ res.scoring ^ "\n" ^ "Rebounding: " ^ res.reb ^ "\n"
-    ^ "Shooting: " ^ res.shooting ^ "\n" ^ "Assists: " ^ res.assists ^ "\n"
-    ^ "Defense: " ^ res.def ^ "\n" ^ "Misc: " ^ res.misc ^ "\n" ^ "Advanced: "
+    "PPG: " ^ res.scoring ^ "\n" ^ "RPG: " ^ res.reb ^ "\n"
+    ^ "EFG%: " ^ res.shooting ^ "\n" ^ "APG: " ^ res.assists ^ "\n"
+    ^ "SPG/BPG: " ^ res.def ^ "\n" ^ "+/-: " ^ res.misc ^ "\n" ^ "USG%: "
     ^ res.adv
+
+  let stat p st =
+    if st = "usg" then p.adv
+    else if st = "+/-" then p.misc
+    else if st = "spg/bpg" then p.def
+    else if st = "apg" then p.assists
+    else if st = "efg" then p.shooting
+    else if st = "rpg" then p.reb
+    else if st = "ppg" then p.scoring
+    else raise (UnknownStat st)
+  
+  let compare (n1 : string) (n2 : string) p1 p2 st =
+    try
+    if float_of_string_opt (stat p1 st) = None 
+      && float_of_string_opt (stat p2 st) = None 
+      then "Neither " ^ n1 ^ " nor " ^ n2 ^ " has a " ^ st ^ " stat."
+    else if float_of_string_opt (stat p1 st) = None
+      && float_of_string_opt (stat p2 st) != None
+      then n1 ^ " doesn't have a " ^ st ^ " stat and " ^ n2 ^ " has "
+      ^ (stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string_opt (stat p1 st) != None
+      && float_of_string_opt (stat p2 st) = None
+      then n2 ^ " doesn't have a " ^ st ^ " stat and " ^ n1 ^ " has "
+      ^ (stat p1 st) ^ " " ^ st ^ "."
+    else if float_of_string (stat p1 st) > float_of_string (stat p2 st)
+      then n1 ^ " has higher " ^ st ^ " than " ^ n2 ^ ". " ^ n1 ^
+      " has " ^ (stat p1 st) ^ " " ^ st ^ " and " ^ n2 ^ " has "
+      ^ (stat p2 st) ^ " " ^ st ^ "."
+    else if float_of_string (stat p1 st) < float_of_string (stat p2 st)
+      then n2 ^ " has higher " ^ st ^ " than " ^ n1 ^ ". " ^ n2 ^
+      " has " ^ (stat p2 st) ^ " " ^ st ^ " and " ^ n1 ^ " has "
+      ^ (stat p1 st) ^ " " ^ st ^ "."
+    else n1 ^ " and " ^ n2 ^ " have the same " ^ st ^ " with "
+      ^ (stat p1 st) ^ "."
+    with 
+    | UnknownStat st -> "That's not a supported stat."
 end
 
 module FootballScrape = struct

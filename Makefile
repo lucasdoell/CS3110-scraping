@@ -17,6 +17,9 @@ utop:
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
+start:
+	OCAMLRUNPARAM=b dune exec bin/interface.exe
+
 zip:
 	rm -f fp.zip
 	zip -r fp.zip . -x@exclude.lst
