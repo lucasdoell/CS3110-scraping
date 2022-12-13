@@ -90,8 +90,7 @@ and main () =
   ANSITerminal.print_string [ ANSITerminal.blue ]
     "\n\nWelcome to the CS 3110 sports database.\n\n";
   print_endline 
-    "Would you like to look at basketball, baseball, hockey,
-                 soccer, or football?\n";
+    "Would you like to look at NBA or NFL?\n";
   print_string "> ";
   match sport_parse (read_line ()) with
   | exception Empty -> (print_endline "Please input a sport";
@@ -103,8 +102,7 @@ and main () =
               main ()
   | Soccer -> print_endline "work in progress";
               main ()
-  | Football -> print_endline "work in progress";
-                main ()
+  | Football -> football ()
   | exception Malformed -> (print_endline "Please input a supported sport";
                            main ())
 

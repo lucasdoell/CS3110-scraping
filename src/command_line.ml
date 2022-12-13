@@ -4,10 +4,10 @@ exception Malformed
 type sport = | Basketball | Football | Baseball | Hockey | Soccer
 
 let sport_parse s =
-  match String.trim s with
+  match String.lowercase_ascii (String.trim s) with
   | "" -> raise Empty
-  | "basketball" -> Basketball
-  | "football" -> Football
+  | "nba" -> Basketball
+  | "nfl" -> Football
   | "baseball" -> Baseball
   | "hockey" -> Hockey
   | "soccer" -> Soccer
