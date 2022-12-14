@@ -39,6 +39,7 @@ install:
 	opam install mechaml
 	opam install ounit2
 	opam install batteries
+	opam install ANSITerminal
 	sudo apt-get install python3
 	sudo apt-get install python3-bs4
 	sudo apt-get install python-is-python3
