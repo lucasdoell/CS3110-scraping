@@ -5,6 +5,7 @@ The following dependencies are required to build and run the application:
 - mechaml
 - ounit2
 - batteries
+- ANSITerminal
 - python3
 - python3-bs4
 - python-is-python3
@@ -28,6 +29,7 @@ $ sudo apt-get upgrade
 $ opam install mechaml
 $ opam install ounit2
 $ opam install batteries
+$ opam install ANSITerminal
 
 # Python Packages
 $ sudo apt-get install python3
