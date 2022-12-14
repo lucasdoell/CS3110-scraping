@@ -1,7 +1,7 @@
-open Scraping.Sport
 open Scraping.Scrape
 open Scraping.Command_line
 
+(** [get_name ()] receives input from the user for the name of a player *)
 let rec get_name () = 
   print_endline "\n\nWhat player would you like to look at?\n";
   print_string " Please enter full first and last name > ";
@@ -13,6 +13,8 @@ let rec get_name () =
     | _ -> (print_endline "Please enter the player's full first and last name";
             get_name ())
 
+(** [compare_first ()] receives input from the user for the name of the first
+    player they want to compare in a comparison *)
 and compare_first () =
   print_endline "\n\nWho's the first player you'd like to compare?\n";
   print_string " Please enter full first and last name > ";
@@ -24,6 +26,8 @@ and compare_first () =
     | _ -> (print_endline "Please enter the player's full first and last name";
             compare_first ())
 
+(** [compare_second ()] receives input from the user for the name of the second
+    player they want to compare in a comparison *)
 and compare_second () =
   print_endline "\n\nWho's the second player you'd like to compare?\n";
   print_string " Please enter full first and last name > ";
@@ -35,6 +39,8 @@ and compare_second () =
     | _ -> (print_endline "Please enter the player's full first and last name";
             compare_second ())
 
+(** [request_basketball_stat ()] receives input from the user for the stat they
+    want to compare *)
 and request_basketball_stat () =
   print_endline "\n\nWould you like to compare their ppg, apg, rpg, spg/bpg, +/-, efg, or usg?";
   print_string "Please pick one of the options > ";
@@ -44,6 +50,8 @@ and request_basketball_stat () =
   | _ -> (print_endline "Please pick a supported stat";
           request_basketball_stat ())
 
+(** [basketball ()] handles anything the user wants to do relating to
+    basketball, such as looking at a player or comparing 2 players *)
 and basketball () =
   print_endline
     "\n\nWould you like to look up a player or compare 2 players?\n";
@@ -69,6 +77,8 @@ and basketball () =
   | "back" -> main ()
   | _ -> basketball ()
 
+(** [football ()] handles anything the player wants to do relating to football,
+    such as looking at a player or comparing 2 players (unimplemented) *)
 and football () =
   print_endline
     "\n\nWould you like to look at a player or compare 2 players?\n";
@@ -86,7 +96,8 @@ and football () =
   | "back" -> main ()
   | _ -> football ()
 
-
+(** [main ()] is the main page where the user can go to any supported sport or
+    league *)
 and main () = 
   ANSITerminal.print_string [ ANSITerminal.blue ]
     "\n\nWelcome to the CS 3110 sports database.\n\n";
@@ -107,5 +118,5 @@ and main () =
   | exception Malformed -> (print_endline "Please input a supported sport";
                            main ())
 
-  
+(** execute the sport database interface *)
 let () = main ()

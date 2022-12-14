@@ -1,6 +1,10 @@
 (** A sports stats scraping library that retrieves its stats from 
     Fox Sports.  *)
 
+exception UnknownStat of string
+(** Raised when a stat function requests an invalid stat. It carries the
+    identifier of the invalid stat requested. *)
+
 val validate_name : string -> string
 (** [validate_name name] is the name of a given player's [name] converted 
     to a URL-safe string. *) 
@@ -45,6 +49,9 @@ module type BBall = sig
     (** [stat player s] returns the requested stat [s] of [player]. *)
 
     val compare : string -> string -> bball_res -> bball_res -> string -> string
+    (** [compare n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
 end
 
 module BasketballScrape : BBall
@@ -194,6 +201,113 @@ module type FBall = sig
     val to_string_punter : punter -> string
     (** [to_string_punter b] is the string representation of the fball_res [b] 
         for a punter position. *)
+
+    val qb_stats : quarterback -> string -> string
+    (** [qb_stats player s] returns the requested stat [s] of [player]. *)
+
+    val off_stats : offensive -> string -> string
+    (** [off_stats player s] returns the requested stat [s] of [player]. *)
+
+    val sup_stats : support -> string -> string
+    (** [sup_stats player s] returns the requested stat [s] of [player]. *)
+
+    val hyb_stats : hybrid -> string -> string
+    (** [hyb_stats player s] returns the requested stat [s] of [player]. *)
+
+    val safety_stats : safety -> string -> string
+    (** [safety_stats player s] returns the requested stat [s] of [player]. *)
+
+    val tck_stats : tackler -> string -> string
+    (** [tck_stats player s] returns the requested stat [s] of [player]. *)
+
+    val kck_stats : kicker -> string -> string
+    (** [kck_stats player s] returns the requested stat [s] of [player]. *)
+
+    val pnt_stats : punter -> string -> string
+    (** [pnt_stats player s] returns the requested stat [s] of [player]. *)
+
+    val compare_qb : string -> string -> quarterback -> quarterback -> string -> string
+    (** [compare_qb n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_offense : string -> string -> offensive -> offensive -> string -> string
+    (** [compare_offense n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_support : string -> string -> support -> support -> string -> string
+    (** [compare_support n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_hybrid : string -> string -> hybrid -> hybrid -> string -> string
+    (** [compare_hybrid n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_safety : string -> string -> safety -> safety -> string -> string
+    (** [compare_safety n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_tackler : string -> string -> tackler -> tackler -> string -> string
+    (** [compare_tackler n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_kicker : string -> string -> kicker -> kicker -> string -> string
+    (** [compare_kicker n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
+
+    val compare_punter : string -> string -> punter -> punter -> string -> string
+    (** [compare_punter n1 n2 p1 p2 stat] returns a string telling whether player [n1] 
+        or [n2] has a higher stat [stat], and tells what their respective stat 
+        is from [p1] and [p2] *)
 end
 
 module FootballScrape : FBall
+
+module type Base = sig
+    type player
+    (** the type of a player *)
+
+    val stat : player -> string -> string
+    (** [stat player s] returns the requested stat [s] of [player]. *)
+
+    val compare : player -> player -> string -> string
+    (** [compare p1 p2 stat] returns a string telling whether player [p1] 
+        or [p2] has a higher stat [stat], and tells what their respective stat 
+        is *)
+end
+
+module Baseball : Base
+
+module type Hoc = sig
+    type goalie
+    (** the type of a goalie *)
+
+    type player
+    (** the type of a nongoalie player *)
+  
+    val goalie_stat : goalie -> string -> string
+    (** [goalie_stat player s] returns the requested stat [s] of [player]. *)
+
+    val player_stat : player -> string -> string
+    (** [player_stat player s] returns the requested stat [s] of [player]. *)
+
+    val compare_goalies : goalie -> goalie -> string -> string
+    (** [compare_goalies p1 p2 stat] returns a string telling whether player [p1] 
+        or [p2] has a higher stat [stat], and tells what their respective stat 
+        is *)
+
+    val compare_players : player -> player -> string -> string
+    (** [compare_players p1 p2 stat] returns a string telling whether player [p1] 
+        or [p2] has a higher stat [stat], and tells what their respective stat 
+        is *)
+end
+
+module Hockey : Hoc
+
+module Soccer : Hoc

@@ -15,10 +15,3 @@ let sport_parse s =
 
 let parse_name n =
   List.filter (fun x -> x <> "") (String.split_on_char ' ' n)
-
-let parse_names n =
-  match List.filter (fun x -> x <> "") (String.split_on_char ',' n) with
-  | [] -> raise Empty
-  | h :: [] -> raise Malformed
-  | h1 :: h2 :: [] -> List.map String.trim [h1; h2]
-  | _ -> raise Malformed
